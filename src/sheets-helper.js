@@ -1,21 +1,10 @@
-import Promise from 'bluebird'
+const Promise = require("bluebird");
 
-export const getInfo = (doc) => new Promise((resolve, reject) => {
-  doc.getInfo((err, info) => {
-    if (info) {
-      resolve(info)
-    } else {
-      reject(err)
-    }
-  })
-})
+const getInfo = doc => Promise.fromCallback(cb => doc.getInfo(cb));
 
-export const getRows = (worksheet) => new Promise((resolve, reject) => {
-  worksheet.getRows((err, rows) => {
-    if (rows) {
-      resolve(rows)
-    } else {
-      reject(err)
-    }
-  })
-})
+const getRows = worksheet => Promise.fromCallback(cb => worksheet.getRows(cb));
+
+module.exports = {
+  getInfo,
+  getRows
+};

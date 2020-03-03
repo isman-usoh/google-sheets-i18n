@@ -1,35 +1,38 @@
-
 /**
- *  Formats rows into key : { language: translation }
+ *  Formats rows into the { key : { language: translation } } object
  *  ie. {
- *  	common.greeting: {
- *  		en_CA: 'Hello!',
- *  		fr_CA: 'Bonjour!'
+ *  	"common.greeting": {
+ *  		"en_CA": "Hello!",
+ *  		"fr_CA": "Bonjour!"
  *  	}
  *  }
  */
 
-export const formatRow = (row, categories, languages, delimiter) => {
-  const formattedRow = {}
-  let rowIndex = categories.reduce((previous, current, index, array) => {
-    if (row[array[0]] === null || row[array[0]] === '#') {
-      return null
+const formatRow = ({ row, categories, languages, delimiter }) => {
+  let rowKey = categories.reduce((acc, category, _index, array) => {
+    if (row[array[0]] === null || row[array[0]] === "#") {
+      return null;
     }
 
-    if (!row[current]) {
-      return previous
+    if (!row[category]) {
+      return acc;
     }
 
-    return previous + delimiter + row[current]
-  }, '')
+    return acc + delimiter + row[category];
+  }, "");
 
-  if (rowIndex !== null) {
-    rowIndex = rowIndex.substr(1)
-    formattedRow[rowIndex] = {}
-    languages.forEach((language) => {
-      formattedRow[rowIndex][language] = row[language.replace(/_/, '').toLowerCase()]
-    })
+  if (!rowKey) {
+    return null;
   }
 
-  return rowIndex ? formattedRow : null
-}
+  rowKey = rowKey.substr(1);
+
+  return {
+    [rowKey]: languages.reduce((acc, language) => {
+      acc[language] = row[language.replace(/_/, "").toLowerCase()];
+      return acc;
+    }, {})
+  };
+};
+
+module.exports = formatRow;

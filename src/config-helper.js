@@ -1,22 +1,24 @@
-import GoogleSpreadsheet from 'google-spreadsheet'
-import Promise from 'bluebird'
-import { cwd } from 'process'
-import path from 'path'
+const GoogleSpreadsheet = require("google-spreadsheet");
+const Promise = require("bluebird");
+const path = require("path");
 
-export function getConfig() {
+const getConfig = () => {
   try {
-    return require(path.join(cwd(), 'i18n.config'))
+    return require(path.join(process.cwd(), "i18n-google-spreadsheets.config"));
   } catch (err) {
-    return null
+    return null;
   }
-}
+};
 
-export function getDocument({ sheetId }) {
-  return Promise.promisifyAll(new GoogleSpreadsheet(sheetId))
-}
+const getDocument = sheetId => Promise.promisifyAll(new GoogleSpreadsheet(sheetId));
 
-export function authorizeConnection({ credentialsPath }, doc) {
-  const creds = require(credentialsPath)
-  return doc.useServiceAccountAuthAsync(creds)
-}
+const authorizeConnection = (credentialsPath, doc) => {
+  const creds = require(credentialsPath);
+  return doc.useServiceAccountAuthAsync(creds);
+};
 
+module.exports = {
+  getConfig,
+  getDocument,
+  authorizeConnection
+};

@@ -1,19 +1,22 @@
 #!/usr/bin/env node
-import program from 'commander'
-import start from './start'
-import sheets from './sheets'
+
+const program = require("commander");
+const fetch = require("./fetch");
+const sheets = require("./sheets");
+
+const packageJSON = require("../package.json");
+
 program
-  .version('0.0.6')
-  .usage('<command>')
-  .option('start', 'Generate translations')
-  .option('sheets', 'List available sheets')
-  .parse(process.argv)
+  .version(packageJSON.version)
+  .usage("<command>")
+  .option("fetch", "Generate translations")
+  .option("sheets", "List available sheets")
+  .parse(process.argv);
 
-
-if (program.start) {
-  start()
+if (program.fetch) {
+  fetch();
 }
 
 if (program.sheets) {
-  sheets()
+  sheets();
 }
