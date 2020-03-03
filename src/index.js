@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 
 const program = require("commander");
-const fetch = require("./fetch");
-const sheets = require("./sheets");
 
 const packageJSON = require("../package.json");
 
@@ -14,9 +12,11 @@ program
   .parse(process.argv);
 
 if (program.fetch) {
+  const fetch = require("./fetch");
   fetch();
 }
 
 if (program.sheets) {
+  const sheets = require("./sheets");
   sheets();
 }

@@ -1,19 +1,17 @@
-const { getConfig, getDocument, authorizeConnection } = require("./config-helper");
-const { getInfo } = require("./sheets-helper");
+const { getConfig, getDocument } = require("./config-helper");
 
-const printSheetsInfo = ({ worksheets }) => {
+const printSheetsInfo = worksheets => {
   worksheets.forEach(({ title }) => {
     console.log(title);
   });
 };
 
-const sheets = () => {
+const sheets = async () => {
   const config = getConfig();
-  const doc = getDocument(config);
-
-  authorizeConnection(config, doc)
-    .then(() => getInfo(doc))
-    .then(printSheetsInfo);
+  const doc = await getDocument(config);
+  await doc.loadInfo();
+  const worksheets = doc.sheetsByIndex;
+  printSheetsInfo(worksheets);
 };
 
 module.exports = sheets;

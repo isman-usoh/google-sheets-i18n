@@ -6,9 +6,10 @@
 The project is a fork of the original `google-sheet-i18n` [by @tanatornn96](https://github.com/tanatornn96) with the following differences:
 
 - to handle the Google's [deprecation of its G-suite API v3](https://cloud.google.com/blog/products/g-suite/migrate-your-apps-use-latest-sheets-api) the dependency `google-spreadsheet` is upgraded to v3,
-- to simplify the code custom formatters are removed, the only output format is JSON which can later be transformed by any tool of the user's choice,
+- **Breaking**: to simplify the code custom formatters are removed, the only output format is JSON which can later be transformed by any tool of the user's choice,
 - the code was modernized and simplified,
-- Babel transpilation is removed, the code works with Node.js >= 10 which supports fair amount of ES6 features.
+- Babel transpilation is removed, the code works with Node.js >= 10 which supports fair amount of ES6 features,
+- **Breaking**: categories are now case-sensitive, as well as the language column names must exactly match the configuration.
 
 # Setup
 

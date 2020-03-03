@@ -9,27 +9,23 @@
  */
 
 const formatRow = ({ row, categories, languages, delimiter }) => {
-  let rowKey = categories.reduce((acc, category, _index, array) => {
-    if (row[array[0]] === null || row[array[0]] === "#") {
-      return null;
-    }
-
-    if (!row[category]) {
-      return acc;
-    }
-
-    return acc + delimiter + row[category];
-  }, "");
-
-  if (!rowKey) {
+  if (!row[categories[0]] || row[categories[0]] === "#") {
     return null;
   }
 
-  rowKey = rowKey.substr(1);
+  const rowKey = categories
+    .reduce((acc, category) => {
+      if (!row[category]) {
+        return acc;
+      }
+
+      return [...acc, row[category]];
+    }, [])
+    .join(delimiter);
 
   return {
     [rowKey]: languages.reduce((acc, language) => {
-      acc[language] = row[language.replace(/_/, "").toLowerCase()];
+      acc[language] = row[language];
       return acc;
     }, {})
   };

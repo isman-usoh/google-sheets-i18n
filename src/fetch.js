@@ -1,11 +1,8 @@
 const Promise = require("bluebird");
-const fse = require("fs-extra");
+const fs = require("fs-extra");
 
-const { getRows, getInfo } = require("./sheets-helper");
 const formatRow = require("./formatter");
-const { getConfig, getDocument, authorizeConnection } = require("./config-helper");
-
-const fs = Promise.promisifyAll(fse);
+const { getConfig, getDocument } = require("./config-helper");
 
 const rowFormatter = rows =>
   JSON.stringify(
@@ -20,7 +17,7 @@ const rowFormatter = rows =>
  * Gets all the rows from the sheet, filters out undefined rows
  */
 const getSheetRows = async ({ worksheet, categories, languages, delimiter }) => {
-  const rows = await getRows(worksheet);
+  const rows = await worksheet.getRows();
   const formattedRows = rows
     .map(row => formatRow({ row, categories, languages, delimiter }))
     .filter(row => row !== null);
@@ -44,11 +41,11 @@ const prepareMapData = (rows, language) =>
 
 const getSheetTranslations = ({ title, rows, output, languages }) =>
   Promise.map(languages, async language => {
-    await fs.ensureDirAsync(`${output}/${language}`);
+    await fs.ensureDir(`${output}/${language}`);
     const writePath = `${output}/${language}/${title}.json`;
     const mappedRows = prepareMapData(rows, language);
 
-    return fs.writeFileAsync(writePath, rowFormatter(mappedRows), "utf8");
+    return fs.writeFile(writePath, rowFormatter(mappedRows), "utf8");
   });
 
 const generateTranslations = (sheets, { output, languages }) => {
@@ -71,8 +68,8 @@ const getSheets = async ({ worksheets, categories, languages, delimiter }) => {
 };
 
 const buildTranslations = async (sheets, { output, languages, categories, delimiter }) => {
-  await fs.removeAsync(output);
-  await fs.ensureDirAsync(output);
+  await fs.remove(output);
+  await fs.ensureDir(output);
   await generateTranslations(sheets, { output, languages, categories, delimiter });
 
   process.stdout.write(` ✓ \n`);
@@ -89,9 +86,9 @@ const fetch = async () => {
   const delimiter = config.delimiter || ".";
   const { output, categories, languages, sheetId, credentialsPath } = config;
 
-  const doc = getDocument(sheetId);
-  await authorizeConnection(credentialsPath, doc);
-  const { worksheets } = await getInfo(doc);
+  const doc = await getDocument({ sheetId, credentialsPath });
+  await doc.loadInfo();
+  const worksheets = doc.sheetsByIndex;
   const sheets = await getSheets({
     worksheets,
     categories,

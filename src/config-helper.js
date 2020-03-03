@@ -1,5 +1,4 @@
-const GoogleSpreadsheet = require("google-spreadsheet");
-const Promise = require("bluebird");
+const { GoogleSpreadsheet } = require("google-spreadsheet");
 const path = require("path");
 
 const getConfig = () => {
@@ -10,15 +9,13 @@ const getConfig = () => {
   }
 };
 
-const getDocument = sheetId => Promise.promisifyAll(new GoogleSpreadsheet(sheetId));
-
-const authorizeConnection = (credentialsPath, doc) => {
-  const creds = require(credentialsPath);
-  return doc.useServiceAccountAuthAsync(creds);
+const getDocument = async ({ sheetId, credentialsPath }) => {
+  const doc = new GoogleSpreadsheet(sheetId);
+  await doc.useServiceAccountAuth(require(credentialsPath));
+  return doc;
 };
 
 module.exports = {
   getConfig,
-  getDocument,
-  authorizeConnection
+  getDocument
 };
