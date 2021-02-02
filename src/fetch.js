@@ -45,16 +45,20 @@ const getSheetTranslations = ({ title, rows, output, languages }) =>
     const writePath = `${output}/${language}/${title}.json`;
     const mappedRows = prepareMapData(rows, language);
 
+    process.stdout.write(`  - Write ${writePath}`);
+
     return fs.writeFile(writePath, rowFormatter(mappedRows), "utf8");
   });
 
 const generateTranslations = (sheets, { output, languages }) => {
   process.stdout.write("Generating i18n files");
-  return Promise.map(sheets, ({ title, rows }) => getSheetTranslations({ title, rows, output, languages }));
+  return Promise.map(sheets, ({ title, rows }) => {
+    return getSheetTranslations({ title, rows, output, languages })
+  });
 };
 
 const getSheets = async ({ worksheets, categories, languages, delimiter }) => {
-  process.stdout.write("Fetching Rows from Google Sheets");
+  process.stdout.write("Fetching from Google Sheets");
   const sheets = await Promise.map(worksheets, worksheet =>
     getSheetRows({
       worksheet,
@@ -68,10 +72,8 @@ const getSheets = async ({ worksheets, categories, languages, delimiter }) => {
 };
 
 const buildTranslations = async (sheets, { output, languages, categories, delimiter }) => {
-  await fs.remove(output);
   await fs.ensureDir(output);
   await generateTranslations(sheets, { output, languages, categories, delimiter });
-
   process.stdout.write(` ✓ \n`);
 };
 

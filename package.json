@@ -1,19 +1,27 @@
 {
-  "name": "@emirotin/i18n-google-spreadsheets",
-  "version": "0.1.0",
+  "name": "@moonshot-team/google-sheets-i18n",
+  "version": "0.1.1",
   "description": "i18n using google sheets",
   "main": "src/index.js",
   "scripts": {
     "lint": "eslint src/**",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/isman-usoh/google-sheets-i18n.git"
+  },
   "keywords": [
     "i18n",
     "internationalization",
     "Google Spreadsheets"
   ],
-  "author": "Eugene Mirotin",
+  "author": {
+    "name": "Isman Usoh",
+    "email": "isman.usoh@gmail.com"
+  },
   "contributors": [
+    "Eugene Mirotin",
     "Tanatorn Nantawinyoo"
   ],
   "license": "MIT",
@@ -31,6 +39,6 @@
     "google-spreadsheet": "^3.0.9"
   },
   "bin": {
-    "i18n-google-spreadsheets": "./src/index.js"
+    "google-sheets-i18n": "./src/index.js"
   }
 }
