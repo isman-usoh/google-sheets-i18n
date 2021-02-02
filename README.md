@@ -53,7 +53,7 @@ Configuration requires a credentials JSON file that can be obtained through Goog
 
 ## Running the Translations
 
-1. `npm install -D @isman-usoh/google-sheets-i18n`
+1. `npm install -D @moonshot-team/google-sheets-i18n`
 2. Create a `i18n.config.js` file in the folder you wish to run the translations on.
 3. `npx google-sheets-i18n fetch`
 
