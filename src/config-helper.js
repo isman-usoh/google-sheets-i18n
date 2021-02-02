@@ -3,7 +3,7 @@ const path = require("path");
 
 const getConfig = () => {
   try {
-    return require(path.join(process.cwd(), "i18n-google-spreadsheets.config"));
+    return require(path.join(process.cwd(), "i18n.config"));
   } catch (err) {
     return null;
   }
