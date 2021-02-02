@@ -1,5 +1,5 @@
 {
-  "name": "@isman-usoh/google-sheets-i18n",
+  "name": "@moonshot-team/google-sheets-i18n",
   "version": "0.1.0",
   "description": "i18n using google sheets",
   "main": "src/index.js",
